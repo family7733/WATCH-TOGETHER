@@ -7,6 +7,26 @@ import MovieCard from './components/MovieCard'
 import Carousel from './components/Carousel'
 import SimpleWatchTogether from './components/SimpleWatchTogether'
 
+function extractYouTubeVideoId(input: string): string | null {
+  const s = input.trim()
+  if (!s) return null
+  if (/^[a-zA-Z0-9_-]{11}$/.test(s)) return s
+  try {
+    const url = new URL(s)
+    if (url.hostname.includes('youtu.be')) {
+      const id = url.pathname.replace('/', '')
+      return /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null
+    }
+    if (url.hostname.includes('youtube.com')) {
+      const id = url.searchParams.get('v')
+      return id && /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null
+    }
+  } catch {
+    // not a URL
+  }
+  return null
+}
+
 function Header() {
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-black/80 border-b border-gray-900/50 shadow-lg">
@@ -18,9 +38,6 @@ function Header() {
           <Link to="/movies" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">Movies</Link>
           <Link to="/dashboard" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">Dashboard</Link>
           <Link to="/about" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">About</Link>
-          <Link to="/auth/login" className="px-4 py-2 rounded-lg bg-gradient-to-r from-red-600 to-red-500 text-white font-semibold hover:from-red-500 hover:to-red-400 transition-all duration-300 shadow-lg shadow-red-500/20 hover:shadow-red-500/40">
-            Login
-          </Link>
       </nav>
       </div>
     </header>
@@ -50,6 +67,9 @@ function HomePage() {
   const [trending, setTrending] = useState<MovieLite[]>([])
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [ytInput, setYtInput] = useState('')
+  const [ytVideoId, setYtVideoId] = useState<string | null>(null)
+
   useEffect(() => {
     setLoading(true)
     setError(null)
@@ -70,6 +90,85 @@ function HomePage() {
   }, [])
   return (
     <div>
+      {/* Watch Together */}
+      <section className="mt-6 mb-8 border border-gray-900/60 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-950 via-black to-black">
+        <div className="px-6 md:px-10 py-8 md:py-10">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+            <div>
+              <div className="inline-block px-3 py-1 rounded-full bg-red-600/15 border border-red-500/30 text-xs font-semibold text-red-300 mb-3">
+                Watch Together (Hosted)
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black">Start a room from Home</h2>
+              <p className="text-sm text-gray-400 mt-2 max-w-2xl">
+                Paste a YouTube link (or video ID), create a room, then share the link with friends.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[1fr_420px]">
+            <div className="rounded-xl border border-gray-900 bg-black/40 p-4 md:p-5">
+              <label className="text-sm font-semibold text-gray-200 block mb-2">YouTube link or video ID</label>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  value={ytInput}
+                  onChange={(e) => {
+                    const v = e.target.value
+                    setYtInput(v)
+                    setYtVideoId(extractYouTubeVideoId(v))
+                  }}
+                  placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                  className="flex-1 px-4 py-3 bg-black border-2 border-gray-800 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-600"
+                />
+                <button
+                  type="button"
+                  onClick={() => setYtVideoId(extractYouTubeVideoId(ytInput))}
+                  className="px-5 py-3 rounded-xl bg-gradient-to-r from-red-600 to-red-500 text-white font-bold text-sm hover:from-red-500 hover:to-red-400 transition-all"
+                >
+                  Use Video
+                </button>
+              </div>
+              {!ytVideoId && ytInput.trim().length > 0 && (
+                <div className="mt-3 text-xs text-yellow-300/90">
+                  Paste a valid YouTube link (or a 11‑character video id).
+                </div>
+              )}
+
+              {ytVideoId && (
+                <div className="mt-5">
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <div className="text-sm font-semibold">Trailer Player</div>
+                    <SimpleWatchTogether movieId="home" videoId={ytVideoId} />
+                  </div>
+                  <div className="aspect-video rounded-xl overflow-hidden border-2 border-gray-800 shadow-2xl" id={`youtube-player-${ytVideoId}`}>
+                    <iframe
+                      id={`youtube-iframe-${ytVideoId}`}
+                      className="w-full h-full"
+                      src={`https://www.youtube.com/embed/${ytVideoId}?enablejsapi=1`}
+                      title="YouTube video"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="rounded-xl border border-gray-900 bg-black/40 p-4 md:p-5">
+              <div className="text-sm font-semibold mb-2">How to use</div>
+              <ol className="text-sm text-gray-300 space-y-2 list-decimal list-inside">
+                <li>Paste a YouTube link and click “Use Video”.</li>
+                <li>Click “Watch Together” → “Create Room”.</li>
+                <li>Copy the share link and send it to friends.</li>
+              </ol>
+              <div className="mt-4 text-xs text-gray-400">
+                Note: Render free tier can sleep. If first load is slow, refresh once.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Hero Section */}
       <section className="relative overflow-hidden rounded-2xl mt-6 mb-12">
         <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 via-black to-black"></div>
@@ -906,8 +1005,8 @@ export default function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<Navigate to="/about" replace />} />
             <Route path="/admin" element={<Navigate to="/" replace />} />
-            <Route path="/auth/login" element={<LoginPage />} />
-            <Route path="/auth/signup" element={<SignupPage />} />
+            <Route path="/auth/login" element={<Navigate to="/" replace />} />
+            <Route path="/auth/signup" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
         <Footer />
