@@ -70,6 +70,17 @@ function HomePage() {
   const [ytInput, setYtInput] = useState('')
   const [ytVideoId, setYtVideoId] = useState<string | null>(null)
 
+  // If someone opens a shared link like "/?v=VIDEO_ID&room=ROOM_ID",
+  // auto-load the video so Watch Together works across devices.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const v = params.get('v')
+    if (v && /^[a-zA-Z0-9_-]{11}$/.test(v)) {
+      setYtInput(`https://youtu.be/${v}`)
+      setYtVideoId(v)
+    }
+  }, [])
+
   useEffect(() => {
     setLoading(true)
     setError(null)
@@ -114,14 +125,26 @@ function HomePage() {
                   onChange={(e) => {
                     const v = e.target.value
                     setYtInput(v)
-                    setYtVideoId(extractYouTubeVideoId(v))
+                    const id = extractYouTubeVideoId(v)
+                    setYtVideoId(id)
+                    const url = new URL(window.location.href)
+                    if (id) url.searchParams.set('v', id)
+                    else url.searchParams.delete('v')
+                    window.history.replaceState({}, '', url)
                   }}
                   placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                   className="flex-1 px-4 py-3 bg-black border-2 border-gray-800 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-600"
                 />
                 <button
                   type="button"
-                  onClick={() => setYtVideoId(extractYouTubeVideoId(ytInput))}
+                  onClick={() => {
+                    const id = extractYouTubeVideoId(ytInput)
+                    setYtVideoId(id)
+                    const url = new URL(window.location.href)
+                    if (id) url.searchParams.set('v', id)
+                    else url.searchParams.delete('v')
+                    window.history.replaceState({}, '', url)
+                  }}
                   className="px-5 py-3 rounded-xl bg-gradient-to-r from-red-600 to-red-500 text-white font-bold text-sm hover:from-red-500 hover:to-red-400 transition-all"
                 >
                   Use Video
