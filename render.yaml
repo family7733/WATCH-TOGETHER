@@ -1,0 +1,21 @@
+# Render Blueprint (free tier): https://render.com/docs/blueprint-spec
+# After pushing this repo to GitHub: Dashboard → New → Blueprint → connect repo.
+# Then set OMDB_API_KEY (and optional TMDB) in the Render service Environment.
+
+services:
+  - type: web
+    name: smart-film-backend
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: backend/backend-node
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: CORS_ORIGINS
+        sync: false
+      - key: OMDB_API_KEY
+        sync: false

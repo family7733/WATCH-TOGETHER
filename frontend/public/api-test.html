@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PAWAR FILMS - API Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #000; color: #fff; }
+    pre { background: #111; padding: 15px; border-radius: 5px; overflow-x: auto; }
+    button { padding: 10px 20px; margin: 5px; background: #e50914; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #f40612; }
+  </style>
+</head>
+<body>
+  <h1>PAWAR FILMS - Backend API Test</h1>
+  <button onclick="testPopular()">Test Popular Movies</button>
+  <button onclick="testSearch()">Test Search</button>
+  <button onclick="testMovieDetails()">Test Movie Details</button>
+  <pre id="result">Click a button to test the API...</pre>
+
+  <script>
+    const TMDB_API_KEY = "28ad717f54f5cf84820b45205b4521df";
+    const TMDB_BASE = "https://api.themoviedb.org/3";
+
+    async function testPopular() {
+      try {
+        const API_URL = `${TMDB_BASE}/movie/popular?api_key=${TMDB_API_KEY}`;
+        const response = await fetch(API_URL, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        document.getElementById('result').textContent = `Popular Movies (${data.results?.length || 0} found):\n\n${JSON.stringify(data, null, 2)}`;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        document.getElementById('result').textContent = `Error: ${error.message}`;
+      }
+    }
+
+    async function testSearch() {
+      try {
+        const API_URL = `${TMDB_BASE}/search/movie?api_key=${TMDB_API_KEY}&query=batman`;
+        const response = await fetch(API_URL, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        document.getElementById('result').textContent = `Search Results for "batman" (${data.results?.length || 0} found):\n\n${JSON.stringify(data, null, 2)}`;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        document.getElementById('result').textContent = `Error: ${error.message}`;
+      }
+    }
+
+    async function testMovieDetails() {
+      try {
+        // Test with a popular movie ID (e.g., 550 - Fight Club)
+        const API_URL = `${TMDB_BASE}/movie/550?api_key=${TMDB_API_KEY}`;
+        const response = await fetch(API_URL, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        document.getElementById('result').textContent = `Movie Details:\n\n${JSON.stringify(data, null, 2)}`;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        document.getElementById('result').textContent = `Error: ${error.message}`;
+      }
+    }
+  </script>
+</body>
+</html>
+

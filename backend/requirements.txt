@@ -1,0 +1,13 @@
+fastapi==0.112.0
+uvicorn[standard]==0.30.5
+python-multipart==0.0.9
+python-jose==3.3.0
+PyJWT==2.9.0
+pydantic==2.8.2
+SQLAlchemy==2.0.32
+psycopg2-binary==2.9.9
+requests==2.32.3
+scikit-learn==1.5.1
+pandas==2.2.2
+numpy==2.0.1
+
