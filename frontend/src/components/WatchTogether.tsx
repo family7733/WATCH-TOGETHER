@@ -46,6 +46,7 @@ export default function WatchTogether({ movieId, videoId }: Props) {
   const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:3000'
   const PUBLIC_APP_URL = (import.meta as any).env?.VITE_PUBLIC_APP_URL || ''
   const shareBase = PUBLIC_APP_URL.trim().replace(/\/$/, '') || window.location.origin
+  const videoParam = videoId ? String(videoId).trim() : ''
   
   // Debug: Log API base
   useEffect(() => {
@@ -316,6 +317,7 @@ export default function WatchTogether({ movieId, videoId }: Props) {
       // Update URL
       const url = new URL(window.location.href)
       url.searchParams.set('room', res.roomId)
+      if (videoParam) url.searchParams.set('v', videoParam)
       window.history.pushState({}, '', url)
     })
   }
@@ -368,6 +370,12 @@ export default function WatchTogether({ movieId, videoId }: Props) {
           socket.emit('player:request-sync', { roomId: res.roomId })
         }, 15000)
       }
+
+      // Ensure URL also includes the video id for cross-device opens
+      const url = new URL(window.location.href)
+      url.searchParams.set('room', res.roomId)
+      if (videoParam) url.searchParams.set('v', videoParam)
+      window.history.pushState({}, '', url)
     })
   }
 
@@ -478,7 +486,12 @@ export default function WatchTogether({ movieId, videoId }: Props) {
   }, [videoId, mode, isHost, roomId, playbackState])
 
   // Generate shareable link - make it more robust
-  const shareLink = roomId ? `${shareBase}${window.location.pathname}?room=${roomId}` : ''
+  const shareLink = roomId
+    ? `${shareBase}${window.location.pathname}?${new URLSearchParams({
+        ...(videoParam ? { v: videoParam } : {}),
+        room: roomId,
+      }).toString()}`
+    : ''
   
   // Copy link to clipboard with better feedback
   const copyShareLink = async () => {

@@ -22,6 +22,7 @@ const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:30
 const PUBLIC_APP_URL = (import.meta as any).env?.VITE_PUBLIC_APP_URL || ''
 const SHARE_BASE = PUBLIC_APP_URL.trim().replace(/\/$/, '')
 const WATCH_API = `${API_BASE}/api/watch-room`
+const isValidVideoId = (v: string) => /^[a-zA-Z0-9_-]{11}$/.test(v)
 
 export default function SimpleWatchTogether({ movieId, videoId }: Props) {
   const [isOpen, setIsOpen] = useState(false)
@@ -81,6 +82,7 @@ export default function SimpleWatchTogether({ movieId, videoId }: Props) {
         // Update URL
         const url = new URL(window.location.href)
         url.searchParams.set('room', data.roomId)
+        if (videoId && isValidVideoId(videoId)) url.searchParams.set('v', videoId)
         window.history.pushState({}, '', url)
         
         startPolling(data.roomId)
@@ -117,6 +119,7 @@ export default function SimpleWatchTogether({ movieId, videoId }: Props) {
         // Update URL
         const url = new URL(window.location.href)
         url.searchParams.set('room', joinRoomId)
+        if (videoId && isValidVideoId(videoId)) url.searchParams.set('v', videoId)
         window.history.pushState({}, '', url)
         
         startPolling(joinRoomId)
@@ -285,7 +288,12 @@ export default function SimpleWatchTogether({ movieId, videoId }: Props) {
     }
   }, [])
 
-  const shareLink = roomId ? `${(SHARE_BASE || window.location.origin)}${window.location.pathname}?room=${roomId}` : ''
+  const shareLink = roomId
+    ? `${(SHARE_BASE || window.location.origin)}${window.location.pathname}?${new URLSearchParams({
+        ...(videoId && isValidVideoId(videoId) ? { v: videoId } : {}),
+        room: roomId,
+      }).toString()}`
+    : ''
 
   return (
     <div className="mt-6">
