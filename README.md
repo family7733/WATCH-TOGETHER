@@ -1,4 +1,4 @@
-# PAWAR FILMS
+# SHADOW STUDIO
 
 Monorepo for a full-stack movie recommendation app.
 

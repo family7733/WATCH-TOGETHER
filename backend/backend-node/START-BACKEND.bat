@@ -1,6 +1,6 @@
 @echo off
 echo ========================================
-echo   PAWAR FILMS - Backend Server
+echo   SHADOW STUDIO - Backend Server
 echo ========================================
 echo.
 echo Starting backend server on port 3000...

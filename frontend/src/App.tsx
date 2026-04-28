@@ -32,7 +32,7 @@ function Header() {
     <header className="sticky top-0 z-50 backdrop-blur-md bg-black/80 border-b border-gray-900/50 shadow-lg">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link to="/" className="text-2xl font-black bg-gradient-to-r from-red-600 to-red-400 bg-clip-text text-transparent hover:from-red-500 hover:to-red-300 transition-all duration-300">
-          PAWAR FILMS
+          SHADOW STUDIO
         </Link>
         <nav className="flex items-center gap-6 text-sm">
           <Link to="/movies" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">Movies</Link>
@@ -50,7 +50,7 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-sm text-gray-400">
-            © {new Date().getFullYear()} <span className="font-bold text-white">PAWAR FILMS</span> • Powered by <span className="text-red-500">Dhananjay Pawar</span>
+            © {new Date().getFullYear()} <span className="font-bold text-white">SHADOW STUDIO</span> • Powered by <span className="text-red-500">Dhananjay Pawar</span>
           </div>
           <div className="flex gap-6 text-sm">
             <Link to="/about" className="text-gray-400 hover:text-white transition-colors">About</Link>
@@ -737,13 +737,13 @@ function DashboardPage() {
 function AboutPage() {
   return (
     <div className="mt-6 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6">About PAWAR FILMS</h1>
+      <h1 className="text-3xl font-bold mb-6">About SHADOW STUDIO</h1>
       
       {/* Mission Section */}
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Our Mission</h2>
         <p className="text-opacity-90 leading-relaxed mb-4">
-          PAWAR FILMS is a modern movie discovery platform designed to help you find and explore movies you'll love. 
+          SHADOW STUDIO is a modern movie discovery platform designed to help you find and explore movies you'll love. 
           We combine the power of AI recommendations with an intuitive interface to make movie discovery effortless and enjoyable.
         </p>
         <p className="text-opacity-90 leading-relaxed">
@@ -825,7 +825,7 @@ function AboutPage() {
                 <span className="text-lg">📧</span>
                 <div>
                   <div className="font-semibold text-sm">Email</div>
-                  <div className="text-sm opacity-80">contact@pawarfilms.com</div>
+                  <div className="text-sm opacity-80">contact@shadowstudio.com</div>
                 </div>
               </div>
               
@@ -841,7 +841,7 @@ function AboutPage() {
                 <span className="text-lg">🌐</span>
                 <div>
                   <div className="font-semibold text-sm">Website</div>
-                  <div className="text-sm opacity-80">www.pawarfilms.com</div>
+                  <div className="text-sm opacity-80">www.shadowstudio.com</div>
                 </div>
               </div>
             </div>
@@ -857,7 +857,7 @@ function AboutPage() {
 
       {/* Footer Note */}
       <section className="text-center text-sm opacity-70">
-        <p>© {new Date().getFullYear()} PAWAR FILMS • Powered by Dhananjay Pawar</p>
+        <p>© {new Date().getFullYear()} SHADOW STUDIO • Powered by Dhananjay Pawar</p>
       </section>
     </div>
   )
@@ -888,7 +888,7 @@ function LoginPage() {
         <div className="relative px-10 py-12 bg-gradient-to-br from-red-700/40 via-black to-black">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(229,9,20,0.25),rgba(0,0,0,0))]" />
           <div className="relative z-10">
-            <div className="text-sm uppercase tracking-[0.3em] text-red-300 mb-4">Pawar Films Studio</div>
+            <div className="text-sm uppercase tracking-[0.3em] text-red-300 mb-4">Shadow Studio</div>
             <h1 className="text-4xl lg:text-5xl font-black leading-tight mb-6">
               Step into your
               <span className="text-red-400"> cinematic universe</span>
@@ -958,7 +958,7 @@ function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@pawarstudio.com"
+                placeholder="you@shadowstudio.com"
                 className="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-red-500"
               />
             </div>
@@ -995,7 +995,7 @@ function LoginPage() {
               type="submit"
               className="w-full bg-red-600 hover:bg-red-700 transition rounded-lg py-3 font-semibold tracking-wide uppercase"
             >
-              Sign in to Pawar Films
+              Sign in to Shadow Studio
             </button>
           </form>
 
@@ -1012,7 +1012,105 @@ function LoginPage() {
     </div>
   )
 }
-function SignupPage() { return <div className="mt-6">Signup</div> }
+function SignupPage() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
+      setError('Please fill in all fields.')
+      return
+    }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.')
+      return
+    }
+    setError(null)
+    alert(`Welcome to Shadow Studio, ${name}!`)
+  }
+
+  return (
+    <div className="mt-6">
+      <div className="max-w-xl mx-auto bg-[#050505] border border-gray-900 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+        <div className="px-8 py-10">
+          <div className="mb-8">
+            <div className="text-sm uppercase tracking-widest text-red-500 mb-2">Sign up</div>
+            <h2 className="text-3xl font-semibold mb-2">Create your Shadow Studio profile</h2>
+            <p className="text-sm opacity-70">Build watchlists, save favorites, and join Watch Together rooms.</p>
+          </div>
+
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div>
+              <label className="text-sm font-medium mb-2 block">Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+                className="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-red-500"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">Email address</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@shadowstudio.com"
+                className="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-red-500"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Create a password"
+                className="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-red-500"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">Confirm password</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm your password"
+                className="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-red-500"
+              />
+            </div>
+
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/40 text-red-200 text-sm px-4 py-2 rounded-lg">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full bg-red-600 hover:bg-red-700 transition rounded-lg py-3 font-semibold tracking-wide uppercase"
+            >
+              Create account
+            </button>
+          </form>
+
+          <div className="mt-6 text-sm text-center opacity-80">
+            Already have an account?{' '}
+            <Link to="/auth/login" className="text-red-400 hover:text-red-300 font-semibold">Sign in</Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function App() {
   return (
@@ -1028,8 +1126,8 @@ export default function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<Navigate to="/about" replace />} />
             <Route path="/admin" element={<Navigate to="/" replace />} />
-            <Route path="/auth/login" element={<Navigate to="/" replace />} />
-            <Route path="/auth/signup" element={<Navigate to="/" replace />} />
+            <Route path="/auth/login" element={<LoginPage />} />
+            <Route path="/auth/signup" element={<SignupPage />} />
           </Routes>
         </main>
         <Footer />

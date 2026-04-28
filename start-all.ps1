@@ -1,7 +1,7 @@
-# PAWAR FILMS - Start All Servers
+# SHADOW STUDIO - Start All Servers
 # This script starts both backend and frontend servers
 
-Write-Host "=== PAWAR FILMS - Starting All Servers ===" -ForegroundColor Green
+Write-Host "=== SHADOW STUDIO - Starting All Servers ===" -ForegroundColor Green
 Write-Host ""
 
 # Set execution policy for this session

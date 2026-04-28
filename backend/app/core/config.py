@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    app_name: str = "PAWAR FILMS"
+    app_name: str = "SHADOW STUDIO"
     environment: str = os.getenv("ENV", "development")
 
     # Security

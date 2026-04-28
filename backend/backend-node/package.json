@@ -1,7 +1,7 @@
 {
-  "name": "pawar-flims-backend",
+  "name": "shadow-studio-backend",
   "version": "0.1.0",
-  "description": "PAWAR FILMS Backend API",
+  "description": "SHADOW STUDIO Backend API",
   "main": "server.js",
   "type": "module",
   "engines": {

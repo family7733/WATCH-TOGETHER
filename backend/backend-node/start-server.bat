@@ -1,5 +1,5 @@
 @echo off
-echo Starting PAWAR FILMS Backend Server...
+echo Starting SHADOW STUDIO Backend Server...
 cd /d %~dp0
 node server.js
 pause

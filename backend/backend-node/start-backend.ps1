@@ -1,5 +1,5 @@
-# PAWAR FILMS Backend Server Startup Script
-Write-Host "Starting PAWAR FILMS Backend Server..." -ForegroundColor Green
+# SHADOW STUDIO Backend Server Startup Script
+Write-Host "Starting SHADOW STUDIO Backend Server..." -ForegroundColor Green
 Write-Host ""
 
 # Change to script directory

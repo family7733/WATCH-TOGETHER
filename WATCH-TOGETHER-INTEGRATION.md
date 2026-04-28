@@ -2,7 +2,7 @@
 
 ## What Was Added
 
-The **Watch Together** feature has been fully integrated into your PAWAR FILMS React app. Users can now watch YouTube trailers together in real-time with friends.
+The **Watch Together** feature has been fully integrated into your SHADOW STUDIO React app. Users can now watch YouTube trailers together in real-time with friends.
 
 ## Files Created/Modified
 
